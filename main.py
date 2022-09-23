@@ -59,7 +59,7 @@ class IncidentDatabase:
         #         except TypeError:
         #             print("Неверный ввод")
         # conn.commit()
-
+        #
         # creattab2 = "create table IF NOT EXISTS faces(id INTEGER PRIMARY KEY autoincrement, 'number criminal case' int, " \
         #             "'person (first and last name)' text,'registration number of person' int, 'address' text, " \
         #             "'num convictions' int, 'fingerprint cipher' text, 'status of a person' text);"
@@ -99,13 +99,30 @@ class IncidentDatabase:
                     sql_up = f"UPDATE IncidentDB set 'registration number of the employee'=? where id=?;"
                     data = (k1[ind][1], i[0])
                     cursor.execute(sql_up, data)
-                    conn.commit()
                     ind += 1
                     if ind > len(k1):
                         ind = 0
-        print(k)
         conn.commit()
+        zap5 = "select * from IncidentDB;"
+        cursor.execute(zap5)
+        k2 = cursor.fetchall()
+        ind = 0
+        for t in k2:
+            for g in t:
+                zap6 = "select * from faces;"
+                cursor.execute(zap6)
+                k3 = cursor.fetchall()
+                if g == t[6] and t[6] != 0 and k3[1] == 0:
+                    sql_up = f"UPDATE faces set 'number criminal case'=? where id=?;"
+                    data = (g, k3[0])
+                    cursor.execute(sql_up, data)
+                    ind += 1
+                    if ind > len(k3):
+                        ind = 0
+                else:
+                    ind += 1
 
+        conn.commit()
         cursor.close()
         conn.close()
 
