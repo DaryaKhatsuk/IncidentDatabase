@@ -6,9 +6,10 @@ datetime.date(2001, 10, 28)
 
 class IncidentDatabase:
     def __init__(self):
-        self.conn = sqlite3.connect("IncidentDB.db")
+        self.conn = sqlite3.connect(r"IncidentDB.db")
         self.cursor = self.conn.cursor()
 
+    # сделано
     def employees(self):
         creattab = "create table IF NOT EXISTS employees(id INTEGER PRIMARY KEY autoincrement, " \
                     "'registration number of the certificate' int, 'full name' text, 'title' text, 'address' text, " \
@@ -35,13 +36,12 @@ class IncidentDatabase:
         self.cursor.close()
         self.conn.close()
 
-    def faces(self):
         creattab = "create table IF NOT EXISTS faces(id INTEGER PRIMARY KEY autoincrement, 'number criminal case' int, " \
                    "'person (first and last name)' text,'registration number of person' int, 'address' text, " \
-                   "'num convictions', 'fingerprint cipher' int, 'status of a person' text);"
+                   "'num convictions' int, 'fingerprint cipher' text, 'status of a person' text);"
         self.cursor.execute(creattab)
         self.conn.commit()
-        tabl = "insert into employees('number criminal case', 'person (first and last name)', " \
+        tabl = "insert into faces('number criminal case', 'person (first and last name)', " \
                "'registration number of person', 'address', 'num convictions', 'fingerprint cipher', " \
                "'status of a person') values (?, ?, ?, ?, ?, ?, ?);"
         while True:
@@ -50,21 +50,21 @@ class IncidentDatabase:
                 break
             else:
                 try:
-                    self.cursor.execute(tabl, (randint(1000000, 9999999), input("ФИО сотрудника: "),
-                                               input("Звание: "), input("Адрес: "), input("Состав семьи: ")))
+                    self.cursor.execute(tabl, (0, input("ФИО гражданина: "),
+                                               int(input("Регистрационный номер лица: ")), input("Адрес: "),
+                                               int(input("Количество судимостей: ")), input("Шифр отпечатков пальцев: "),
+                                               input("Статус гражданина в происшествии: ")))
                 except TypeError:
                     print("Неверный ввод")
-
         self.conn.commit()
-        zap = "select * from employees;"
+        zap = "select * from faces;"
         self.cursor.execute(zap)
         k = self.cursor.fetchall()
         print(k)
         self.cursor.close()
         self.conn.close()
 
-    def incident(self):
-        creattab = "create table IF NOT EXISTS IncidentDB(id INTEGER PRIMARY KEY autoincrement, 'registration number' "\
+        creattab = "create table IF NOT EXISTS IncidentDB(id INTEGER PRIMARY KEY autoincrement, 'registration number' " \
                    "int, 'date of registration' int, 'type event' text, 'source messages' text, " \
                    "'registration criminal case' text, 'number criminal case' int, 'number of the operation' int, " \
                    "'registration number of the employee' int, 'the scene of the incident' text, " \
@@ -84,28 +84,30 @@ class IncidentDatabase:
                     self.cursor.execute(tabl1, (randint(1000000, 9999999),
                                                 datetime.date(randint(2001, 2022), randint(1, 12), randint(1, 31)),
                                                 input("Тип происшествия: "), input("Источник сообщения: "),
-                                                input("Уголовное дело(да, нет): "), "-",
+                                                input("Уголовное дело(да, нет): "), 0,
                                                 int(input("Регистрационный номер сообщения: ")),
                                                 input("Регистрационный номер сотрудника: "),
-                                                input("Место происшествия: "), input("Краткое описание происшествия:")))
-                    self.conn.commit()
-                    zap2 = "select * from IncidentDB;"
-                    self.cursor.execute(zap2)
-                    k = self.cursor.fetchall()
-                    print(k)
-                    if k[5] == "да":
-                        zap2 = "insert into IncidentDB('registration criminal case') values(?);"
-                        self.cursor.execute(zap2, ())
-                        self.conn.commit()
+                                                input("Место происшествия: "),
+                                                input("Краткое описание происшествия: ")))
                 except TypeError:
                     print("Неверный ввод")
-        zap = "select * from employees;"
+        zap = "select * from IncidentDB;"
         self.cursor.execute(zap)
         k1 = self.cursor.fetchall()
         print(k1)
         self.cursor.close()
         self.conn.close()
 
+    # # добав. персон и связать номера дел
+    # def faces(self):
+    #
+    #
+    # # добав. номера уголовных дел, при их наличии
+    # def incident(self):
+
+
 
 base = IncidentDatabase()
-base.incident()
+base.employees()
+# base.incident()
+# base.faces()
