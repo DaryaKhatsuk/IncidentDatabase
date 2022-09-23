@@ -1,7 +1,7 @@
 # IncidentDatabase
 Create a database before learning the links.
-
 Technical task:
+
 Incident Registration Database
 It is necessary to create an incident registration database, which should contain:
 - data for registering reports of incidents (registration number of the message, 
