@@ -2,8 +2,6 @@ import sqlite3
 from random import *
 import datetime
 
-datetime.date(2001, 10, 28)
-
 
 class IncidentDatabase:
     def __init__(self):
@@ -99,6 +97,7 @@ class IncidentDatabase:
                     sql_up = f"UPDATE IncidentDB set 'registration number of the employee'=? where id=?;"
                     data = (k1[ind][1], i[0])
                     cursor.execute(sql_up, data)
+                    conn.commit()
                     ind += 1
                     if ind > len(k1):
                         ind = 0
@@ -112,15 +111,17 @@ class IncidentDatabase:
                 zap6 = "select * from faces;"
                 cursor.execute(zap6)
                 k3 = cursor.fetchall()
-                if g == t[6] and t[6] != 0 and k3[1] == 0:
-                    sql_up = f"UPDATE faces set 'number criminal case'=? where id=?;"
-                    data = (g, k3[0])
-                    cursor.execute(sql_up, data)
-                    ind += 1
-                    if ind > len(k3):
-                        ind = 0
-                else:
-                    ind += 1
+                if g == t[6] and t[6] != 0:
+                    for r in k3:
+                        for h in r:
+                            if h == 0:
+                                sql_up = f"UPDATE faces set 'number criminal case'=? where id=?;"
+                                data = (g, r[1])
+                                cursor.execute(sql_up, data)
+                                conn.commit()
+                                ind += 1
+                                if ind > len(k3):
+                                    ind = 0
 
         conn.commit()
         cursor.close()
@@ -129,4 +130,3 @@ class IncidentDatabase:
 
 base = IncidentDatabase()
 base.bases()
-# base.update()
