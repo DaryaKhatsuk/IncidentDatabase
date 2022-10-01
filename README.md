@@ -19,3 +19,5 @@ of the certificate, title, full name, address, family composition);
 - information about the incident itself (registration number of the message, 
 registration number of the employee who arrived at the incident, the scene of the 
 incident, a brief description of the incident).
+
+Completed during the course on the profession of Python developer.
